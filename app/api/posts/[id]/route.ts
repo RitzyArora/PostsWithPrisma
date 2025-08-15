@@ -21,11 +21,12 @@ export async function GET(_req: Request, context: { params: Promise<{id:string}>
 }
 
 // UPDATE
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: { params: Promise<{id:string}> }) {
+const{id}=await context.params
   try {
     const body = await req.json();
     const updatedPost = await prisma.post.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: {
         title: body.title,
         content: body.content,
@@ -39,10 +40,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // DELETE
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, context: { params: Promise<{id:string}> }) {
+  const{id}=await context.params
   try {
     await prisma.post.delete({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
     return NextResponse.json({ message: "Post deleted" });
   } catch (err) {
