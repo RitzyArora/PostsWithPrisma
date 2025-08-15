@@ -4,10 +4,11 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 // READ SINGLE
-export async function GET(_req: Request, { params }: { params: Record<string,string> }) {
+export async function GET(_req: Request, context: { params: Promise<{id:string}> }) {
+  const{id}=await context.params
   try {
     const post = await prisma.post.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
