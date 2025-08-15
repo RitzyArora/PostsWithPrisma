@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 // READ SINGLE
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, { params }: { params: Record<string,string> }) {
   try {
     const post = await prisma.post.findUnique({
       where: { id: Number(params.id) },
